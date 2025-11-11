@@ -4,6 +4,7 @@ import istad.co.nectarapi.features.auth.dto.AuthResponse;
 import istad.co.nectarapi.features.auth.dto.LoginRequest;
 import istad.co.nectarapi.features.auth.dto.RefreshTokenRequest;
 import istad.co.nectarapi.features.auth.dto.RegisterRequest;
+import istad.co.nectarapi.features.user.dto.UserResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public AuthResponse register(@Valid @RequestBody RegisterRequest request) {
+    public UserResponse register(@Valid @RequestBody RegisterRequest request) {
         return authService.register(request);
     }
 

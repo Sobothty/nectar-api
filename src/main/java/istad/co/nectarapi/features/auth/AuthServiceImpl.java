@@ -9,6 +9,8 @@ import istad.co.nectarapi.features.auth.dto.RefreshTokenRequest;
 import istad.co.nectarapi.features.auth.dto.RegisterRequest;
 import istad.co.nectarapi.features.role.RoleRepository;
 import istad.co.nectarapi.features.user.UserRepository;
+import istad.co.nectarapi.features.user.dto.UserResponse;
+import istad.co.nectarapi.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -37,10 +39,11 @@ public class AuthServiceImpl implements AuthService {
     private final DaoAuthenticationProvider daoAuthenticationProvider;
     private final JwtService jwtService;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
+    private final UserMapper userMapper;
 
     @Transactional
     @Override
-    public AuthResponse register(RegisterRequest request) {
+    public UserResponse register(RegisterRequest request) {
         // Check if email already exists
         if (userRepository.existsByEmail(request.email())) {
             throw new ResponseStatusException(
@@ -78,12 +81,11 @@ public class AuthServiceImpl implements AuthService {
         user.setIsBlocked(false);
         user.setRoles(List.of(userRole));
 
-        userRepository.save(user);
+        user = userRepository.save(user);
 
         log.info("User registered successfully: {}", user.getEmail());
 
-        // Auto login after registration
-        return login(new LoginRequest(request.email(), request.password()));
+        return userMapper.toUserResponse(user);
     }
 
     @Override

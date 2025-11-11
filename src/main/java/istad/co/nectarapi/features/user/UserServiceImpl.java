@@ -5,9 +5,14 @@ import istad.co.nectarapi.domain.Role;
 import istad.co.nectarapi.domain.User;
 import istad.co.nectarapi.enums.RoleName;
 import istad.co.nectarapi.features.role.RoleRepository;
+import istad.co.nectarapi.features.user.dto.UserResponse;
+import istad.co.nectarapi.features.user.dto.UserUpdate;
 import istad.co.nectarapi.mapper.UserMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,6 +24,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public BasedMessage assignAdminRole(String email) {
@@ -74,5 +81,26 @@ public class UserServiceImpl implements UserService{
         user.setRoles(roles);
         userRepository.save(user);
         return new BasedMessage("Admin role removed successfully");
+    }
+
+    @Override
+    public UserResponse getProfile(Jwt jwt) {
+        String uuid = jwt.getClaimAsString("uuid");
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        return userMapper.toUserResponse(user);
+    }
+
+    @Transactional
+    @Override
+    public UserResponse editProfile(Jwt jwt, UserUpdate userUpdate) {
+        String uuid = jwt.getClaimAsString("uuid");
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        userMapper.updateUser(userUpdate, user);
+        user.setPassword(passwordEncoder.encode(userUpdate.password()));
+        user = userRepository.save(user);
+        return userMapper.toUserResponse(user);
     }
 }
