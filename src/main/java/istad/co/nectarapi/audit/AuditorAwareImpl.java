@@ -16,25 +16,40 @@ public class AuditorAwareImpl implements AuditorAware<String> {
     public Optional<String> getCurrentAuditor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        // No authentication or not authenticated
         if (authentication == null || !authentication.isAuthenticated()) {
             return Optional.of("SYSTEM");
         }
 
+        // Anonymous user
         if ("anonymousUser".equals(authentication.getPrincipal())) {
             return Optional.of("SYSTEM");
         }
 
+        // JWT Authentication (Most common case - from access token)
         if (authentication.getPrincipal() instanceof Jwt jwt) {
-            String subject = jwt.getSubject();
-            return Optional.of(subject);
+            // Get UUID from JWT claims (better than email)
+            String uuid = jwt.getClaimAsString("uuid");
+            if (uuid != null) {
+                return Optional.of(uuid);
+            }
+
+            // Fallback to email if UUID not found
+            String email = jwt.getClaimAsString("email");
+            if (email != null) {
+                return Optional.of(email);
+            }
+
+            // Last fallback to subject
+            return Optional.of(jwt.getSubject());
         }
 
+        // UserDetails Authentication (during login/register before JWT)
         if (authentication.getPrincipal() instanceof CustomUserDetails userDetails) {
-            String username = userDetails.getUsername();
-            return Optional.of(username);
+            return Optional.of(userDetails.getUsername());
         }
 
-        String name = authentication.getName();
-        return Optional.of(name);
+        // Fallback
+        return Optional.of(authentication.getName());
     }
 }

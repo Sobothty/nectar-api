@@ -1,9 +1,6 @@
 package istad.co.nectarapi.audit;
 
-
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
@@ -29,8 +26,35 @@ public abstract class Auditable {
     private Instant createdAt;
 
     @LastModifiedBy
+    @Column(nullable = false)
     private String updatedBy;
 
     @LastModifiedDate
+    @Column(nullable = false)
     private Instant updatedAt;
+
+
+    @PrePersist
+    protected void prePersist() {
+        if (createdAt == null) {
+            createdAt = Instant.now();
+        }
+        if (updatedAt == null) {
+            updatedAt = Instant.now();
+        }
+        if (createdBy == null) {
+            createdBy = "SYSTEM";
+        }
+        if (updatedBy == null) {
+            updatedBy = "SYSTEM";
+        }
+    }
+
+    @PreUpdate
+    protected void preUpdate() {
+        updatedAt = Instant.now();
+        if (updatedBy == null) {
+            updatedBy = "SYSTEM";
+        }
+    }
 }
