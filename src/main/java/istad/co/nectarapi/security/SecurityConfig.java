@@ -73,14 +73,38 @@ public class SecurityConfig {
 
         httpSecurity
                 .authorizeHttpRequests(request -> request
-                        // Public endpoints
+                        // Auth endpoints
                         .requestMatchers("/api/v1/auth/**").permitAll()
+
+                        // Upload file
+                        .requestMatchers("/api/v1/files/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/nectar/**").permitAll()
+
+                        // User endpoints
                         .requestMatchers(HttpMethod.GET, "/api/v1/users/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers("/api/v1/files/**").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.GET, "/nectar/**").permitAll()
+
+                        // Category endpoints
+                        .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/categories/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/categories/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/categories/**").hasRole("ADMIN")
+
+                        // Product endpoints
+                        .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/products/**").hasRole("ADMIN")
+                        // Orders endpoints
+                        .requestMatchers(HttpMethod.GET, "/api/v1/orders/**").hasAnyRole
+                                ("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/orders/**").hasAnyRole
+                                ("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/orders/**").hasAnyRole
+                                ("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/orders/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 );
 

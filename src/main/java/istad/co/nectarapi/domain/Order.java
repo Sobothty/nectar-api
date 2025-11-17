@@ -19,6 +19,9 @@ public class Order extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String uuid;
+
     private String orderNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,6 +32,8 @@ public class Order extends Auditable {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    private Boolean isDeleted;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items;

@@ -1,5 +1,6 @@
 package istad.co.nectarapi.features.user;
 
+import istad.co.nectarapi.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,11 +18,11 @@ public class UserResolver {
 
         // Try to find by UUID first
         return userRepository.findByUuid(identifier)
-                .map(user -> user.getName())
+                .map(User::getName)
                 .orElseGet(() -> {
                     // Try by email if UUID not found
                     return userRepository.findByEmail(identifier)
-                            .map(user -> user.getName())
+                            .map(User::getName)
                             .orElse(identifier); // Return identifier if user not found
                 });
     }
@@ -33,7 +34,7 @@ public class UserResolver {
         }
 
         return userRepository.findByUuid(uuid)
-                .map(user -> user.getEmail())
+                .map(User::getEmail)
                 .orElse(uuid);
     }
 }
