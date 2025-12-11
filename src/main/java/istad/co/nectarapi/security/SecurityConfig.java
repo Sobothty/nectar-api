@@ -74,6 +74,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         // Auth endpoints
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/bakong/**").permitAll()
+                        .requestMatchers("/api/v1/bakong/**").permitAll()
 
                         // Upload file
                         .requestMatchers("/api/v1/files/**").permitAll()
@@ -104,7 +106,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/v1/orders/**").hasAnyRole
                                 ("ADMIN", "USER")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/orders/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+
+
+                        .anyRequest().permitAll()
                 );
 
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2

@@ -37,8 +37,16 @@ dependencies {
     // MInio
     implementation 'io.minio:minio:8.5.7'
 
+    // Keyclaok
+    implementation 'org.keycloak:keycloak-admin-client:26.0.6'
+
     // Apache Commons IO (for file utilities)
     implementation 'commons-io:commons-io:2.15.1'
+
+    // Bakong api
+    implementation 'kh.gov.nbc.bakong_khqr:sdk-java:1.0.0.11'
+    implementation 'com.google.zxing:core:3.5.3'
+    implementation 'com.google.zxing:javase:3.5.3'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
