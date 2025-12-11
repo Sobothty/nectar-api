@@ -108,7 +108,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/orders/**").hasRole("ADMIN")
 
 
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 );
 
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2
