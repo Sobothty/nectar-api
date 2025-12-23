@@ -54,7 +54,7 @@ public class ProductInit {
 
     private List<Product> createFruits(Category category) {
         return List.of(
-                createProduct("Apple", "Fresh red apples from New Zealand.", new BigDecimal("1.50"), category, "https://img.freepik.com/free-psd/close-up-delicious-apple_23-2151868338.jpg?semt=ais_hybrid&w=740&q=80"),
+                createProduct("Apple", "Fresh red apples from New Zealand.", new BigDecimal("0.10"), category, "https://img.freepik.com/free-psd/close-up-delicious-apple_23-2151868338.jpg?semt=ais_hybrid&w=740&q=80"),
                 createProduct("Banana", "Sweet ripe bananas full of potassium.", new BigDecimal("0.75"), category, "https://nutritionsource.hsph.harvard.edu/wp-content/uploads/2018/08/bananas-1354785_1920-1024x683.jpg"),
                 createProduct("Orange", "Juicy and full of vitamin C.", new BigDecimal("1.20"), category, "https://www.health.com/thmb/OZgW2YQtFb9qJ3PbySNei3YdgPw=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Health-Stocksy_txp5e95690asrw300_Medium_934585-e870449543284eed8aa4be52fc09a4ed.jpg"),
                 createProduct("Grapes", "Fresh green seedless grapes.", new BigDecimal("2.80"), category, "https://snaped.fns.usda.gov/sites/default/files/styles/crop_ratio_7_5/public/seasonal-produce/2018-05/grapes_0.jpg.webp?itok=ZiqbgHzZ")
