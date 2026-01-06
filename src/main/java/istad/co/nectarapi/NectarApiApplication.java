@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
 public class NectarApiApplication {
-
+    //test
     public static void main(String[] args) {
         SpringApplication.run(NectarApiApplication.class, args);
     }
